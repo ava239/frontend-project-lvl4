@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Menu from "./Menu";
+import Menu from './Menu.jsx';
 
 const mapStateToProps = (state) => {
   const props = {};
@@ -10,7 +10,6 @@ const mapStateToProps = (state) => {
 };
 
 class App extends React.Component {
-
   render() {
     return (
       <>

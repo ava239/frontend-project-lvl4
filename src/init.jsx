@@ -14,12 +14,10 @@ const store = createStore(
 );
 /* eslint-enable */
 
-const init = () => {
-  return (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
-};
+const init = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
 export default init;
