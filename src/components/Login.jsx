@@ -4,19 +4,13 @@ import {
   Form,
   Field,
 } from 'formik';
+import * as yup from 'yup';
+import { FormFloating, FormLabel } from 'react-bootstrap';
 
-const MyInput = ({
-  field,
-  form,
-  id,
-  placeholder,
-  ...props
-}) => (
-  <>
-    <input id={id} {...field} {...props} />
-    <label className="form-label" htmlFor={id}>{placeholder}</label>
-  </>
-);
+const loginSchema = yup.object().shape({
+  username: yup.string().required(),
+  password: yup.string().required(),
+});
 
 export default () => (
   <div className="container-fluid h-100">
@@ -33,13 +27,14 @@ export default () => (
             </div>
             <Formik
               initialValues={{ username: '', password: '' }}
+              validationSchema={loginSchema}
+              onSubmit={() => {}}
             >
               {({ isSubmitting }) => (
                 <Form className="col-12 col-md-6 mt-3 mt-mb-0">
                   <h1 className="text-center mb-4">Войти</h1>
-                  <div className="form-floating mb-3 form-group">
+                  <FormFloating className="mb-3">
                     <Field
-                      component={MyInput}
                       type="text"
                       name="username"
                       autoComplete="username"
@@ -48,10 +43,10 @@ export default () => (
                       id="username"
                       className="form-control"
                     />
-                  </div>
-                  <div className="form-floating mb-4 form-group">
+                    <FormLabel htmlFor="username">Ваш ник</FormLabel>
+                  </FormFloating>
+                  <FormFloating className="mb-4">
                     <Field
-                      component={MyInput}
                       type="password"
                       name="password"
                       autoComplete="current-password"
@@ -60,7 +55,8 @@ export default () => (
                       id="password"
                       className="form-control"
                     />
-                  </div>
+                    <FormLabel htmlFor="password">Пароль</FormLabel>
+                  </FormFloating>
                   <button type="submit" className="w-100 mb-3 btn btn-outline-primary" disabled={isSubmitting}>
                     Войти
                   </button>
