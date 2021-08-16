@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Menu from './Menu.jsx';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   const props = {};
   return props;
 };
