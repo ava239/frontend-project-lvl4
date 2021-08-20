@@ -60,31 +60,32 @@ const AuthButton = () => {
   );
 };
 
-const { t } = useTranslation();
-
-export default () => (
-  <AuthProvider>
-    <div className="d-flex flex-column h-100">
-      <Router>
-        <Navbar bg="light" expand="lg" className="shadow-sm">
-          <Container>
-            <Navbar.Brand as={Link} to="/">{t('brand')}</Navbar.Brand>
-            <Nav className="mr-auto" />
-            <AuthButton />
-          </Container>
-        </Navbar>
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <PrivateRoute exact path="/">
-            <MainPage />
-          </PrivateRoute>
-          <Route path="*">
-            <NoMatch />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-  </AuthProvider>
-);
+export default () => {
+  const { t } = useTranslation();
+  return (
+    <AuthProvider>
+      <div className="d-flex flex-column h-100">
+        <Router>
+          <Navbar bg="light" expand="lg" className="shadow-sm">
+            <Container>
+              <Navbar.Brand as={Link} to="/">{t('brand')}</Navbar.Brand>
+              <Nav className="mr-auto" />
+              <AuthButton />
+            </Container>
+          </Navbar>
+          <Switch>
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+            <PrivateRoute exact path="/">
+              <MainPage />
+            </PrivateRoute>
+            <Route path="*">
+              <NoMatch />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </AuthProvider>
+  );
+};
