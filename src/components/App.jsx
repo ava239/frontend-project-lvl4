@@ -52,10 +52,11 @@ const PrivateRoute = ({ children, path }) => {
 
 const AuthButton = () => {
   const auth = useContext(authContext);
+  const { t } = useTranslation();
 
   return (
     auth.loggedIn
-      ? <Button onClick={auth.logOut}>Log out</Button>
+      ? <Button onClick={auth.logOut}>{t('logout')}</Button>
       : null
   );
 };
