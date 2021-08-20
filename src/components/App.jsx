@@ -14,6 +14,7 @@ import {
   Nav,
   Container,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import LoginPage from './LoginPage.jsx';
 import MainPage from './MainPage.jsx';
 import authContext from '../contexts/index.jsx';
@@ -59,13 +60,15 @@ const AuthButton = () => {
   );
 };
 
+const { t } = useTranslation();
+
 export default () => (
   <AuthProvider>
     <div className="d-flex flex-column h-100">
       <Router>
         <Navbar bg="light" expand="lg" className="shadow-sm">
           <Container>
-            <Navbar.Brand as={Link} to="/">Chat</Navbar.Brand>
+            <Navbar.Brand as={Link} to="/">{t('brand')}</Navbar.Brand>
             <Nav className="mr-auto" />
             <AuthButton />
           </Container>
