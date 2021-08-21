@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/index.jsx';
 import routes from '../routes.js';
 
-export default () => {
+const LoginPage = () => {
   const { t } = useTranslation();
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
@@ -71,7 +71,6 @@ export default () => {
                     placeholder={t('username')}
                     id="username"
                     isInvalid={authFailed}
-                    className="form-control"
                     ref={inputRef}
                   />
                   <Form.Label htmlFor="username">{t('username')}</Form.Label>
@@ -87,7 +86,6 @@ export default () => {
                     placeholder={t('password')}
                     id="password"
                     isInvalid={authFailed}
-                    className="form-control"
                   />
                   <Form.Label htmlFor="password">{t('password')}</Form.Label>
                   <Form.Control.Feedback tooltip type="invalid">{t('password_incorrect')}</Form.Control.Feedback>
@@ -110,3 +108,4 @@ export default () => {
     </div>
   );
 };
+export default LoginPage;
