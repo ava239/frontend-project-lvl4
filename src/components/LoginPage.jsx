@@ -5,7 +5,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../hooks/index.jsx';
+import { useAuth } from '../hooks';
 import routes from '../routes.js';
 
 const LoginPage = () => {

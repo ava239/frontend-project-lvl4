@@ -6,7 +6,7 @@ import { Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { debug } from 'debug';
-import { useAuth, useSocket } from '../hooks/index.jsx';
+import { useAuth, useSocket } from '../hooks';
 
 const mapStateToProps = (state) => {
   const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
@@ -48,6 +48,7 @@ const Chat = ({
       const onError = () => {
         chatLogger('message.send.error');
         formik.setSubmitting(false);
+        inputRef.current.focus();
       };
       const withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
         // eslint-disable-next-line functional/no-let

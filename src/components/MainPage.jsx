@@ -10,7 +10,7 @@ import * as actions from '../actions';
 import routes from '../routes.js';
 import Channels from './Channels.jsx';
 import Chat from './Chat.jsx';
-import { useSocket } from '../hooks/index.jsx';
+import { useSocket } from '../hooks';
 
 const mapState = (state) => state;
 

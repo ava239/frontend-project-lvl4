@@ -17,8 +17,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import LoginPage from './LoginPage.jsx';
 import MainPage from './MainPage.jsx';
-import { authContext } from '../contexts/index.jsx';
-import { useAuth, useSocket } from '../hooks/index.jsx';
+import { authContext } from '../contexts';
+import { useAuth, useSocket } from '../hooks';
 import NoMatch from './NoMatchPage.jsx';
 
 const AuthProvider = ({ children }) => {
