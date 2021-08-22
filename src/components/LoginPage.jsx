@@ -5,7 +5,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import useAuth from '../hooks/index.jsx';
+import { useAuth } from '../hooks/index.jsx';
 import routes from '../routes.js';
 
 const LoginPage = () => {
@@ -17,6 +17,7 @@ const LoginPage = () => {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -32,7 +33,7 @@ const LoginPage = () => {
       try {
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('user', JSON.stringify(res.data));
-        auth.logIn();
+        auth.logIn(res.data);
         history.replace('/');
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {

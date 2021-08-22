@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
+import { debug } from 'debug';
+import { useAuth, useSocket } from '../hooks/index.jsx';
 
 const mapStateToProps = (state) => {
   const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
@@ -13,17 +15,23 @@ const mapStateToProps = (state) => {
     messages,
     ({ channelId }) => channelId === currentChannelId,
   );
-  return { channel, messagesByChannel };
+  return { channel, messagesByChannel, currentChannelId };
 };
 
 const actionCreators = {};
+const chatLogger = debug('chat:client');
 
 const Chat = ({
   channel,
   messagesByChannel,
+  currentChannelId,
+  chatBox,
 }) => {
   const { t } = useTranslation();
   const inputRef = useRef();
+  const auth = useAuth();
+  const socket = useSocket();
+
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -33,9 +41,44 @@ const Chat = ({
       body: '',
     },
     validationSchema: yup.object().shape({
-      body: yup.string().required(),
+      body: yup.string().required().min(1),
     }),
-    onSubmit: () => {},
+    validateOnMount: true,
+    onSubmit: (values) => {
+      const onError = () => {
+        chatLogger('message.send.error');
+        formik.setSubmitting(false);
+      };
+      const withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
+        // eslint-disable-next-line functional/no-let
+        let called = false;
+
+        const timer = setTimeout(() => {
+          if (called) return;
+          called = true;
+          onTimeout();
+        }, timeout);
+
+        return (...args) => {
+          if (called) return;
+          called = true;
+          clearTimeout(timer);
+          onSuccess(...args);
+        };
+      };
+
+      const message = { ...values, channelId: currentChannelId, username: auth.username };
+      chatLogger('message.send');
+
+      socket.volatile.emit('newMessage', message, withTimeout(({ status }) => {
+        if (status !== 'ok') {
+          onError();
+          return;
+        }
+        formik.resetForm({ isSubmitting: false });
+        inputRef.current.focus();
+      }, onError));
+    },
   });
 
   const renderMessage = (message) => (
@@ -56,11 +99,11 @@ const Chat = ({
           {t('messages', { count: messagesByChannel.length })}
         </span>
       </div>
-      <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+      <div id="messages-box" ref={chatBox} className="chat-messages overflow-auto px-5">
         {messagesByChannel.map(renderMessage)}
       </div>
       <div className="mt-auto px-5 py-3">
-        <Form noValidate className="py-1 border rounded-2">
+        <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
           <InputGroup className="has-validation">
             <Form.Control
               onChange={formik.handleChange}
@@ -72,8 +115,9 @@ const Chat = ({
               id="body"
               className="border-0 p-0 ps-2"
               ref={inputRef}
+              disabled={formik.isSubmitting}
             />
-            <Button variant="" disabled={formik.isValid} type="submit" className="btn-group-vertical">
+            <Button variant="" disabled={!formik.dirty || formik.isSubmitting} type="submit" className="btn-group-vertical">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                 <path
                   fillRule="evenodd"

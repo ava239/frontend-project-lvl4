@@ -10,7 +10,7 @@ export default {
     registration_link: 'Регистрация',
     enter_message: 'Введите сообщение...',
     messages_0: '{{count}} сообщения',
-    messages_1: '{{count}} сообщение',
+    messages_1: '{{count}} сообщения',
     messages_2: '{{count}} сообщений',
     send: 'Отправить',
     channel_name: '# {{name}}',

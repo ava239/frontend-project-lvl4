@@ -18,6 +18,10 @@ const messagesInfo = createReducer(
     [actions.setInitialState](state, { payload: { messages } }) {
       return { messages };
     },
+    [actions.addMessage](state, { payload: { message } }) {
+      const { messages } = state;
+      return { messages: [...Object.values(messages), message] };
+    },
   },
 );
 

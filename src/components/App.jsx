@@ -17,22 +17,38 @@ import {
 import { useTranslation } from 'react-i18next';
 import LoginPage from './LoginPage.jsx';
 import MainPage from './MainPage.jsx';
-import authContext from '../contexts/index.jsx';
-import useAuth from '../hooks/index.jsx';
+import { authContext } from '../contexts/index.jsx';
+import { useAuth, useSocket } from '../hooks/index.jsx';
 import NoMatch from './NoMatchPage.jsx';
 
-const AuthProvider = ({ children, user = {} }) => {
+const AuthProvider = ({ children }) => {
+  const storageUser = JSON.parse(localStorage.getItem('user')) ?? {};
+
+  const [user, setUser] = useState(storageUser);
   const userLoggedIn = Boolean(user && user.token);
   const [loggedIn, setLoggedIn] = useState(userLoggedIn);
+  const socket = useSocket();
 
-  const logIn = () => setLoggedIn(true);
+  const logIn = (data) => {
+    setLoggedIn(true);
+    setUser(data);
+  };
   const logOut = () => {
     localStorage.removeItem('user');
     setLoggedIn(false);
+    setUser({});
+    socket.disconnect();
+    socket.removeAllListeners();
   };
 
   return (
-    <authContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <authContext.Provider value={{
+      loggedIn,
+      logIn,
+      logOut,
+      username: user.username,
+    }}
+    >
       {children}
     </authContext.Provider>
   );
@@ -64,9 +80,8 @@ const AuthButton = () => {
 
 const App = () => {
   const { t } = useTranslation();
-  const user = JSON.parse(localStorage.getItem('user'));
   return (
-    <AuthProvider user={user}>
+    <AuthProvider>
       <div className="d-flex flex-column h-100">
         <Router>
           <Navbar bg="light" expand="lg" className="shadow-sm">

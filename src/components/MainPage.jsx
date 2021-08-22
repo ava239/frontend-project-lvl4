@@ -1,18 +1,22 @@
 // @ts-check
 
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
+import { debug } from 'debug';
 import * as actions from '../actions';
 import routes from '../routes.js';
 import Channels from './Channels.jsx';
 import Chat from './Chat.jsx';
+import { useSocket } from '../hooks/index.jsx';
 
 const mapState = (state) => state;
 
 const actionCreators = {
   setInitialState: actions.setInitialState,
+  addMessage: actions.addMessage,
 };
 
 const getAuthHeader = () => {
@@ -25,10 +29,16 @@ const getAuthHeader = () => {
   return {};
 };
 
-const MainPage = ({ setInitialState }) => {
+const MainPage = ({ setInitialState, addMessage }) => {
   const [loaded, setLoaded] = useState(false);
   const { t } = useTranslation();
+  const socket = useSocket();
+  const socketLogger = debug('chat:socket');
+
+  const chatBoxRef = useRef(null);
+
   useEffect(() => {
+    const scroll = () => chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
     const fetchContent = async () => {
       const { data, status } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
       if (status !== 200) {
@@ -36,6 +46,16 @@ const MainPage = ({ setInitialState }) => {
       }
       setInitialState(data);
       setLoaded(true);
+      socket.connect();
+      socket.on('newMessage', (message) => {
+        addMessage({ message });
+        socketLogger('newMessage', message);
+        scroll();
+      });
+      socket.on('newChannel', _.noop);
+      socket.on('removeChannel', _.noop);
+      socket.on('renameChannel', _.noop);
+      scroll();
     };
 
     fetchContent();
@@ -58,7 +78,7 @@ const MainPage = ({ setInitialState }) => {
           <Channels />
         </div>
         <div className="col p-0 h-100">
-          <Chat />
+          <Chat chatBox={chatBoxRef} />
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import { createContext } from 'react';
+import { io } from 'socket.io-client';
 
-const authContext = createContext({});
+const socket = io({ autoConnect: false });
 
-export default authContext;
+export const authContext = createContext({});
+export const socketContext = createContext(socket);
