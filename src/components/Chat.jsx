@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 const actionCreators = {};
 
 const Chat = ({
-  channel = { name: '' },
+  channel,
   messagesByChannel,
 }) => {
   const { t } = useTranslation();

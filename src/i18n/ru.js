@@ -14,5 +14,6 @@ export default {
     messages_2: '{{count}} сообщений',
     send: 'Отправить',
     channel_name: '# {{name}}',
+    loading: 'Загрузка...',
   },
 };
