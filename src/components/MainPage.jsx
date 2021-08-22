@@ -11,7 +11,7 @@ import Chat from './Chat.jsx';
 const mapState = (state) => state;
 
 const actionCreators = {
-  initData: actions.initData,
+  setInitialState: actions.setInitialState,
 };
 
 const getAuthHeader = () => {
@@ -24,11 +24,11 @@ const getAuthHeader = () => {
   return {};
 };
 
-const MainPage = ({ initData }) => {
+const MainPage = ({ setInitialState }) => {
   useEffect(() => {
     const fetchContent = async () => {
       const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-      initData(data);
+      setInitialState(data);
     };
 
     fetchContent();

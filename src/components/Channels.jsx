@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import _ from 'lodash';
 
 const mapStateToProps = (state) => {
-  const { channels: { byId, allIds }, currentChannelId } = state;
-  const channels = allIds.map((id) => byId[id]);
+  const { channelsInfo: { channels, currentChannelId } } = state;
   return { channels, currentChannelId };
 };
 
@@ -44,7 +44,7 @@ const Channels = ({
         </button>
       </div>
       <ul className="nav flex-column nav-pills nav-fill px-2">
-        {channels.map(renderChannel)}
+        {_.map(channels, renderChannel)}
       </ul>
     </>
   );

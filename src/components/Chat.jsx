@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 
 const mapStateToProps = (state) => {
-  const { messages, channels: { byId }, currentChannelId } = state;
-  const channel = byId[currentChannelId] ?? { name: '' };
+  const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
+  const channel = _.find(channels, ({ id }) => id === currentChannelId);
   const messagesByChannel = _.filter(
-    messages.byId,
+    messages,
     ({ channelId }) => channelId === currentChannelId,
   );
   return { channel, messagesByChannel };
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 const actionCreators = {};
 
 const Chat = ({
-  channel,
+  channel = { name: '' },
   messagesByChannel,
 }) => {
   const { t } = useTranslation();

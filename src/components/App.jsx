@@ -1,6 +1,6 @@
 // @ts-check
 
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,12 +21,13 @@ import authContext from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
 import NoMatch from './NoMatchPage.jsx';
 
-const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+const AuthProvider = ({ children, user = {} }) => {
+  const userLoggedIn = Boolean(user && user.token);
+  const [loggedIn, setLoggedIn] = useState(userLoggedIn);
 
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('user');
     setLoggedIn(false);
   };
 
@@ -51,7 +52,7 @@ const PrivateRoute = ({ children, path }) => {
 };
 
 const AuthButton = () => {
-  const auth = useContext(authContext);
+  const auth = useAuth();
   const { t } = useTranslation();
 
   return (
@@ -63,8 +64,9 @@ const AuthButton = () => {
 
 const App = () => {
   const { t } = useTranslation();
+  const user = JSON.parse(localStorage.getItem('user'));
   return (
-    <AuthProvider>
+    <AuthProvider user={user}>
       <div className="d-flex flex-column h-100">
         <Router>
           <Navbar bg="light" expand="lg" className="shadow-sm">

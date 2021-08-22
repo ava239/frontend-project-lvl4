@@ -3,38 +3,25 @@
 import { createReducer } from '@reduxjs/toolkit';
 import * as actions from '../actions/index.js';
 
-const channels = createReducer(
-  { byId: {}, allIds: [] },
+const channelsInfo = createReducer(
+  { channels: {}, currentChannelId: null },
   {
-    [actions.initData](state, { payload }) {
-      return {
-        byId: payload.channels,
-        allIds: Object.keys(payload.channels),
-      };
+    [actions.setInitialState](state, { payload: { channels, currentChannelId } }) {
+      return { channels, currentChannelId };
     },
   },
 );
 
-const messages = createReducer(
-  { byId: {}, allIds: [] },
+const messagesInfo = createReducer(
+  { messages: {} },
   {
-    [actions.initData](state, { payload }) {
-      return {
-        byId: payload.messages,
-        allIds: Object.keys(payload.messages),
-      };
+    [actions.setInitialState](state, { payload: { messages } }) {
+      return { messages };
     },
   },
 );
-
-const currentChannelId = createReducer(null, {
-  [actions.initData](state, { payload }) {
-    return payload.currentChannelId;
-  },
-});
 
 export default {
-  channels,
-  messages,
-  currentChannelId,
+  channelsInfo,
+  messagesInfo,
 };
