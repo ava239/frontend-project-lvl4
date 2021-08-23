@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { debug } from 'debug';
 import { useAuth, useSocket } from '../hooks';
+import { chatLogger } from '../logger';
 
 const mapStateToProps = (state) => {
   const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
-  const channel = _.find(channels, ({ id }) => id === currentChannelId);
+  const channel = _.find(channels, ({ id }) => id === currentChannelId) ?? { name: '' };
   const messagesByChannel = _.filter(
     messages,
     ({ channelId }) => channelId === currentChannelId,
@@ -19,7 +19,6 @@ const mapStateToProps = (state) => {
 };
 
 const actionCreators = {};
-const chatLogger = debug('chat:client');
 
 const Chat = ({
   channel,
@@ -50,28 +49,11 @@ const Chat = ({
         formik.setSubmitting(false);
         inputRef.current.focus();
       };
-      const withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
-        // eslint-disable-next-line functional/no-let
-        let called = false;
-
-        const timer = setTimeout(() => {
-          if (called) return;
-          called = true;
-          onTimeout();
-        }, timeout);
-
-        return (...args) => {
-          if (called) return;
-          called = true;
-          clearTimeout(timer);
-          onSuccess(...args);
-        };
-      };
 
       const message = { ...values, channelId: currentChannelId, username: auth.username };
       chatLogger('message.send');
 
-      socket.volatile.emit('newMessage', message, withTimeout(({ status }) => {
+      socket.volatile.emit('newMessage', message, socket.withTimeout(({ status }) => {
         if (status !== 'ok') {
           onError();
           return;

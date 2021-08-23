@@ -13,6 +13,11 @@ const channelsInfo = createReducer(
       const { channels } = state;
       return { channels, currentChannelId };
     },
+    [actions.addChannel](state, { payload: { channel } }) {
+      const { channels, currentChannelId } = state;
+      const newChannels = [...channels, channel];
+      return { channels: newChannels, currentChannelId };
+    },
   },
 );
 

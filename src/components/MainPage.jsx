@@ -5,18 +5,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { debug } from 'debug';
 import * as actions from '../actions';
 import routes from '../routes.js';
 import Channels from './Channels.jsx';
 import Chat from './Chat.jsx';
 import { useSocket } from '../hooks';
+import getModal from '../modals/index.js';
+import { socketLogger } from '../logger';
 
 const mapState = (state) => state;
 
 const actionCreators = {
   setInitialState: actions.setInitialState,
   addMessage: actions.addMessage,
+  addChannel: actions.addChannel,
 };
 
 const getAuthHeader = () => {
@@ -29,16 +31,25 @@ const getAuthHeader = () => {
   return {};
 };
 
-const MainPage = ({ setInitialState, addMessage }) => {
+const renderModal = ({ modalInfo, hideModal }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+
+  const Component = getModal(modalInfo.type);
+  return <Component modalInfo={modalInfo} onHide={hideModal} />;
+};
+
+const MainPage = ({ setInitialState, addMessage, addChannel }) => {
   const [loaded, setLoaded] = useState(false);
+  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const { t } = useTranslation();
   const socket = useSocket();
-  const socketLogger = debug('chat:socket');
 
   const chatBoxRef = useRef(null);
+  const scroll = () => chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
 
   useEffect(() => {
-    const scroll = () => chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
     const fetchContent = async () => {
       const { data, status } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
       if (status !== 200) {
@@ -46,16 +57,19 @@ const MainPage = ({ setInitialState, addMessage }) => {
       }
       setInitialState(data);
       setLoaded(true);
+      scroll();
       socket.connect();
       socket.on('newMessage', (message) => {
         addMessage({ message });
         socketLogger('newMessage', message);
         scroll();
       });
-      socket.on('newChannel', _.noop);
+      socket.on('newChannel', (channel) => {
+        addChannel({ channel });
+        socketLogger('newChannel', channel);
+      });
       socket.on('removeChannel', _.noop);
       socket.on('renameChannel', _.noop);
-      scroll();
     };
 
     fetchContent();
@@ -71,17 +85,23 @@ const MainPage = ({ setInitialState, addMessage }) => {
     );
   }
 
+  const hideModal = () => setModalInfo({ type: null, item: null });
+  const showModal = (type, item = null) => setModalInfo({ type, item });
+
   return (
-    <div className="container h-100 my-4 overflow-hidden rounded shadow">
-      <div className="row h-100 bg-white flex-md-row">
-        <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-          <Channels />
-        </div>
-        <div className="col p-0 h-100">
-          <Chat chatBox={chatBoxRef} />
+    <>
+      <div className="container h-100 my-4 overflow-hidden rounded shadow">
+        <div className="row h-100 bg-white flex-md-row">
+          <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
+            <Channels showModal={showModal} />
+          </div>
+          <div className="col p-0 h-100">
+            <Chat chatBox={chatBoxRef} />
+          </div>
         </div>
       </div>
-    </div>
+      {renderModal({ modalInfo, hideModal })}
+    </>
   );
 };
 

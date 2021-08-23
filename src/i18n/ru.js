@@ -13,7 +13,10 @@ export default {
     messages_1: '{{count}} сообщения',
     messages_2: '{{count}} сообщений',
     send: 'Отправить',
+    cancel: 'Отменить',
     channel_name: '# {{name}}',
     loading: 'Загрузка...',
+    add_channel: 'Добавить канал',
+    should_be_unique: 'Должно быть уникальным',
   },
 };
