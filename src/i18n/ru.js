@@ -9,7 +9,7 @@ export default {
     no_account_link: 'Нет аккаунта?',
     registration_link: 'Регистрация',
     enter_message: 'Введите сообщение...',
-    messages_0: '{{count}} сообщения',
+    messages_0: '{{count}} сообщение',
     messages_1: '{{count}} сообщения',
     messages_2: '{{count}} сообщений',
     send: 'Отправить',

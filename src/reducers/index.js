@@ -9,6 +9,10 @@ const channelsInfo = createReducer(
     [actions.setInitialState](state, { payload: { channels, currentChannelId } }) {
       return { channels, currentChannelId };
     },
+    [actions.setCurrentChannel](state, { payload: { currentChannelId } }) {
+      const { channels } = state;
+      return { channels, currentChannelId };
+    },
   },
 );
 

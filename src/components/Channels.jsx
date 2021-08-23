@@ -2,24 +2,29 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import _ from 'lodash';
+import * as actions from '../actions';
 
 const mapStateToProps = (state) => {
   const { channelsInfo: { channels, currentChannelId } } = state;
   return { channels, currentChannelId };
 };
 
-const actionCreators = {};
+const actionCreators = {
+  setCurrentChannel: actions.setCurrentChannel,
+};
 
 const Channels = ({
   channels,
   currentChannelId,
+  setCurrentChannel,
 }) => {
   const renderChannel = (channel) => {
     const currentVariant = channel.id === currentChannelId ? 'secondary' : null;
+    const changeChannel = () => setCurrentChannel({ currentChannelId: channel.id });
 
     return (
       <li key={channel.id} className="nav-item w-100">
-        <Button className="w-100 rounded-0 text-start" variant={currentVariant}>
+        <Button className="w-100 rounded-0 text-start" variant={currentVariant} onClick={changeChannel}>
           <span className="me-1">#</span>
           {channel.name}
         </Button>
