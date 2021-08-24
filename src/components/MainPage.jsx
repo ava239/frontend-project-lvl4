@@ -13,12 +13,17 @@ import { useSocket } from '../hooks';
 import getModal from '../modals/index.js';
 import { socketLogger } from '../logger';
 
-const mapState = (state) => state;
+const mapStateToProps = (state) => {
+  const { modal } = state;
+  return { modal };
+};
 
 const actionCreators = {
   setInitialState: actions.setInitialState,
   addMessage: actions.addMessage,
   addChannel: actions.addChannel,
+  openModal: actions.openModal,
+  closeModal: actions.closeModal,
 };
 
 const getAuthHeader = () => {
@@ -31,18 +36,24 @@ const getAuthHeader = () => {
   return {};
 };
 
-const renderModal = ({ modalInfo, hideModal }) => {
-  if (!modalInfo.type) {
+const renderModal = ({ modalInfo, closeModal }) => {
+  if (!modalInfo.isOpened) {
     return null;
   }
 
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} onHide={hideModal} />;
+  return <Component modalInfo={modalInfo} onHide={closeModal} />;
 };
 
-const MainPage = ({ setInitialState, addMessage, addChannel }) => {
+const MainPage = ({
+  setInitialState,
+  addMessage,
+  addChannel,
+  modal,
+  closeModal,
+  openModal,
+}) => {
   const [loaded, setLoaded] = useState(false);
-  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const { t } = useTranslation();
   const socket = useSocket();
 
@@ -85,24 +96,21 @@ const MainPage = ({ setInitialState, addMessage, addChannel }) => {
     );
   }
 
-  const hideModal = () => setModalInfo({ type: null, item: null });
-  const showModal = (type, item = null) => setModalInfo({ type, item });
-
   return (
     <>
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-            <Channels showModal={showModal} />
+            <Channels showModal={openModal} />
           </div>
           <div className="col p-0 h-100">
             <Chat chatBox={chatBoxRef} />
           </div>
         </div>
       </div>
-      {renderModal({ modalInfo, hideModal })}
+      {renderModal({ modalInfo: modal, closeModal })}
     </>
   );
 };
 
-export default connect(mapState, actionCreators)(MainPage);
+export default connect(mapStateToProps, actionCreators)(MainPage);

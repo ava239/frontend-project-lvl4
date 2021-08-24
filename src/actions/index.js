@@ -1,6 +1,12 @@
-import { createAction } from '@reduxjs/toolkit';
+import { setInitialState, setCurrentChannel, addChannel } from '../slices/channels.js';
+import { addMessage } from '../slices/messages.js';
+import { openModal, closeModal } from '../slices/modal.js';
 
-export const setInitialState = createAction('channelsInfo/setInitialState');
-export const setCurrentChannel = createAction('channelsInfo/setCurrentChannel');
-export const addChannel = createAction('channelsInfo/addChannel');
-export const addMessage = createAction('messagesInfo/addMessage');
+export {
+  setInitialState,
+  setCurrentChannel,
+  addChannel,
+  addMessage,
+  openModal,
+  closeModal,
+};
