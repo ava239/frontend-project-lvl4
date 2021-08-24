@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -25,14 +25,14 @@ const Chat = ({
   messagesByChannel,
   currentChannelId,
   chatBox,
+  messageInput,
 }) => {
   const { t } = useTranslation();
-  const inputRef = useRef();
   const auth = useAuth();
   const socket = useSocket();
 
   useEffect(() => {
-    inputRef.current.focus();
+    messageInput.current.focus();
   }, []);
 
   const formik = useFormik({
@@ -47,7 +47,7 @@ const Chat = ({
       const onError = () => {
         chatLogger('message.send.error');
         formik.setSubmitting(false);
-        inputRef.current.focus();
+        messageInput.current.focus();
       };
 
       const message = { ...values, channelId: currentChannelId, username: auth.username };
@@ -59,7 +59,7 @@ const Chat = ({
           return;
         }
         formik.resetForm({ isSubmitting: false });
-        inputRef.current.focus();
+        messageInput.current.focus();
       }, onError));
     },
   });
@@ -97,7 +97,7 @@ const Chat = ({
               placeholder={t('enter_message')}
               id="body"
               className="border-0 p-0 ps-2"
-              ref={inputRef}
+              ref={messageInput}
               disabled={formik.isSubmitting}
             />
             <Button variant="" disabled={!formik.dirty || formik.isSubmitting} type="submit" className="btn-group-vertical">

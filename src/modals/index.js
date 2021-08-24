@@ -4,7 +4,7 @@ import Rename from './Rename.jsx';
 
 const modals = {
   addChannel: Add,
-  removing: Remove,
+  removeChannel: Remove,
   renaming: Rename,
 };
 

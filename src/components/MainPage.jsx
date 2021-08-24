@@ -22,6 +22,7 @@ const actionCreators = {
   setInitialState: actions.setInitialState,
   addMessage: actions.addMessage,
   addChannel: actions.addChannel,
+  removeChannel: actions.removeChannel,
   openModal: actions.openModal,
   closeModal: actions.closeModal,
 };
@@ -51,6 +52,7 @@ const MainPage = ({
   addChannel,
   modal,
   closeModal,
+  removeChannel,
   openModal,
 }) => {
   const [loaded, setLoaded] = useState(false);
@@ -58,6 +60,7 @@ const MainPage = ({
   const socket = useSocket();
 
   const chatBoxRef = useRef(null);
+  const messageRef = useRef(null);
   const scroll = () => chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
 
   useEffect(() => {
@@ -79,7 +82,10 @@ const MainPage = ({
         addChannel({ channel });
         socketLogger('newChannel', channel);
       });
-      socket.on('removeChannel', _.noop);
+      socket.on('removeChannel', (channel) => {
+        removeChannel({ channelId: channel.id });
+        socketLogger('removeChannel', channel);
+      });
       socket.on('renameChannel', _.noop);
     };
 
@@ -101,10 +107,10 @@ const MainPage = ({
       <div className="container h-100 my-4 overflow-hidden rounded shadow">
         <div className="row h-100 bg-white flex-md-row">
           <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-            <Channels showModal={openModal} />
+            <Channels showModal={openModal} messageInput={messageRef} />
           </div>
           <div className="col p-0 h-100">
-            <Chat chatBox={chatBoxRef} />
+            <Chat chatBox={chatBoxRef} messageInput={messageRef} />
           </div>
         </div>
       </div>

@@ -17,6 +17,10 @@ export default {
     channel_name: '# {{name}}',
     loading: 'Загрузка...',
     add_channel: 'Добавить канал',
+    remove_channel: 'Удалить канал?',
     should_be_unique: 'Должно быть уникальным',
+    remove: 'Удалить',
+    rename: 'Переименовать',
+    confirm: 'Уверены?',
   },
 };

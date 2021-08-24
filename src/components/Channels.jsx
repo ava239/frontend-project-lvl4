@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import * as actions from '../actions';
 
 const mapStateToProps = (state) => {
@@ -17,21 +18,52 @@ const Channels = ({
   currentChannelId,
   setCurrentChannel,
   showModal,
+  messageInput,
 }) => {
+  const { t } = useTranslation();
+
+  const openAddChannelModal = () => showModal({ type: 'addChannel' });
+  const openRemoveChannelModal = ({ id }) => showModal({ type: 'removeChannel', extra: { channelId: id } });
+
   const renderChannel = (channel) => {
     const currentVariant = channel.id === currentChannelId ? 'secondary' : null;
-    const changeChannel = () => setCurrentChannel({ currentChannelId: channel.id });
+    const changeChannel = () => {
+      setCurrentChannel({ currentChannelId: channel.id });
+      messageInput.current.focus();
+    };
+
+    if (!channel.removable) {
+      return (
+        <li key={channel.id} className="nav-item w-100">
+          <Button className="w-100 rounded-0 text-start" variant={currentVariant} onClick={changeChannel}>
+            <span className="me-1">#</span>
+            {channel.name}
+          </Button>
+        </li>
+      );
+    }
 
     return (
       <li key={channel.id} className="nav-item w-100">
-        <Button className="w-100 rounded-0 text-start" variant={currentVariant} onClick={changeChannel}>
-          <span className="me-1">#</span>
-          {channel.name}
-        </Button>
+        <Dropdown as={ButtonGroup} className="d-flex">
+          <Button
+            className="w-100 rounded-0 text-start text-truncate"
+            variant={currentVariant}
+            onClick={changeChannel}
+          >
+            <span className="me-1">#</span>
+            {channel.name}
+          </Button>
+          <Dropdown.Toggle split variant={currentVariant} />
+
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('remove')}</Dropdown.Item>
+            <Dropdown.Item>{t('rename')}</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </li>
     );
   };
-  const openAddChannelModal = () => showModal({ type: 'addChannel' });
 
   return (
     <>
