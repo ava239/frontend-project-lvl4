@@ -10,7 +10,7 @@ import { chatLogger } from '../logger';
 
 const mapStateToProps = (state) => {
   const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
-  const channel = _.find(channels, ({ id }) => id === currentChannelId) ?? { name: '' };
+  const channel = _.find(channels, ({ id }) => id === currentChannelId);
   const messagesByChannel = _.filter(
     messages,
     ({ channelId }) => channelId === currentChannelId,
@@ -67,8 +67,7 @@ const Chat = ({
   const renderMessage = (message) => (
     <div key={message.id} className="text-break mb-2">
       <b>{message.username}</b>
-      :
-      {message.body}
+      {`: ${message.body}`}
     </div>
   );
 
@@ -76,11 +75,9 @@ const Chat = ({
     <div className="d-flex flex-column h-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
-          <b>{t('channel_name', { name: channel.name })}</b>
+          <b>{t('channel_name', { name: channel && channel.name })}</b>
         </p>
-        <span className="text-muted">
-          {t('messages', { count: messagesByChannel.length })}
-        </span>
+        <span className="text-muted">{t('messages', { count: messagesByChannel.length })}</span>
       </div>
       <div id="messages-box" ref={chatBox} className="chat-messages overflow-auto px-5">
         {messagesByChannel.map(renderMessage)}
