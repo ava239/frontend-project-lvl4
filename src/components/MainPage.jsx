@@ -4,7 +4,6 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import _ from 'lodash';
 import * as actions from '../actions';
 import routes from '../routes.js';
 import Channels from './Channels.jsx';
@@ -23,6 +22,7 @@ const actionCreators = {
   addMessage: actions.addMessage,
   addChannel: actions.addChannel,
   removeChannel: actions.removeChannel,
+  renameChannel: actions.renameChannel,
   openModal: actions.openModal,
   closeModal: actions.closeModal,
 };
@@ -43,7 +43,7 @@ const renderModal = ({ modalInfo, closeModal }) => {
   }
 
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} onHide={closeModal} />;
+  return <Component modalInfo={modalInfo} onHide={() => closeModal()} />;
 };
 
 const MainPage = ({
@@ -53,6 +53,7 @@ const MainPage = ({
   modal,
   closeModal,
   removeChannel,
+  renameChannel,
   openModal,
 }) => {
   const [loaded, setLoaded] = useState(false);
@@ -86,7 +87,10 @@ const MainPage = ({
         removeChannel({ channelId: channel.id });
         socketLogger('removeChannel', channel);
       });
-      socket.on('renameChannel', _.noop);
+      socket.on('renameChannel', (channel) => {
+        renameChannel(channel);
+        socketLogger('renameChannel', channel);
+      });
     };
 
     fetchContent();

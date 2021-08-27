@@ -22,6 +22,13 @@ const channelsInfo = createSlice({
       const newChannelId = currentChannelId !== channelId ? currentChannelId : 1;
       return { channels: newChannels, currentChannelId: newChannelId };
     },
+    renameChannel: (state, { payload: { id: channelId, name } }) => {
+      const { channels } = state;
+      const channel = channels.find(({ id }) => id === channelId);
+      if (channel) {
+        channel.name = name;
+      }
+    },
   },
 });
 export const {
@@ -29,5 +36,6 @@ export const {
   setCurrentChannel,
   addChannel,
   removeChannel,
+  renameChannel,
 } = channelsInfo.actions;
 export default channelsInfo.reducer;

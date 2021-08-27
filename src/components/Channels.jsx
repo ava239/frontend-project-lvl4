@@ -24,6 +24,7 @@ const Channels = ({
 
   const openAddChannelModal = () => showModal({ type: 'addChannel' });
   const openRemoveChannelModal = ({ id }) => showModal({ type: 'removeChannel', extra: { channelId: id } });
+  const openRenameChannelModal = ({ id }) => showModal({ type: 'renameChannel', extra: { channelId: id } });
 
   const renderChannel = (channel) => {
     const currentVariant = channel.id === currentChannelId ? 'secondary' : null;
@@ -58,7 +59,7 @@ const Channels = ({
 
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('remove')}</Dropdown.Item>
-            <Dropdown.Item>{t('rename')}</Dropdown.Item>
+            <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('rename')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </li>

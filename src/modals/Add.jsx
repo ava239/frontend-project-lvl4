@@ -9,8 +9,8 @@ import { chatLogger } from '../logger';
 import * as actions from '../actions';
 
 const mapStateToProps = (state) => {
-  const { channelsInfo: { channels, currentChannelId } } = state;
-  return { channels, currentChannelId };
+  const { channelsInfo: { channels } } = state;
+  return { channels };
 };
 
 const actionCreators = {
