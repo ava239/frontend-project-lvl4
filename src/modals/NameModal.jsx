@@ -1,18 +1,46 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  const { channelsInfo: { channels } } = state;
+  return { channels };
+};
+const actionCreators = {};
 
 const NameModal = ({
-  name,
-  formik,
+  nameKey,
+  onSubmit,
   onHide,
   inputRef,
+  channels,
+  initialName,
 }) => {
   const { t } = useTranslation();
+
+  const formik = useFormik({
+    initialValues: {
+      name: initialName,
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema: yup.object().shape({
+      name: yup.string()
+        .required(t('validation.required_field'))
+        .min(3, t('validation.username_length'))
+        .max(20, t('validation.username_length'))
+        .test('unique', t('validation.should_be_unique'), (element) => !channels.map(({ name }) => name).includes(element)),
+    }),
+    onSubmit: (values) => onSubmit(formik)(values),
+  });
+
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>{t(name)}</Modal.Title>
+        <Modal.Title>{t(nameKey)}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -43,4 +71,4 @@ const NameModal = ({
     </Modal>
   );
 };
-export default NameModal;
+export default connect(mapStateToProps, actionCreators)(NameModal);
