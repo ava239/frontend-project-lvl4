@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { Modal, Form, Button } from 'react-bootstrap';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { useSocket } from '../hooks';
 import { chatLogger } from '../logger';
+import NameModal from './NameModal.jsx';
 
 const mapStateToProps = (state) => {
   const { channelsInfo: { channels }, modal: { extra: { channelId } } } = state;
@@ -62,38 +62,6 @@ const Rename = ({
     },
   });
 
-  return (
-    <Modal show centered>
-      <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>{t('popup.title.rename')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
-          <Form.Group>
-            <Form.Control
-              onChange={formik.handleChange}
-              className="mb-2"
-              data-testid="input-body"
-              name="name"
-              required
-              value={formik.values.name}
-              ref={inputRef}
-              isInvalid={!formik.isValid}
-              disabled={formik.isSubmitting}
-            />
-            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
-            <div className="d-flex justify-content-end">
-              <Button variant="secondary" className="me-2" type="button" onClick={onHide}>
-                {t('popup.button.cancel')}
-              </Button>
-              <Button variant="primary" type="submit" disabled={formik.isSubmitting}>
-                {t('popup.button.send')}
-              </Button>
-            </div>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-    </Modal>
-  );
+  return <NameModal onHide={onHide} name="popup.title.rename" formik={formik} inputRef={inputRef} />;
 };
 export default connect(mapStateToProps, actionCreators)(Rename);
