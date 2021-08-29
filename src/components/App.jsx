@@ -7,6 +7,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
+import { Provider, ErrorBoundary } from '@rollbar/react';
 import LoginPage from './LoginPage.jsx';
 import SignupPage from './SignupPage.jsx';
 import MainPage from './MainPage.jsx';
@@ -14,6 +15,11 @@ import { authContext } from '../contexts';
 import { useAuth, useSocket } from '../hooks';
 import NoMatch from './NoMatchPage.jsx';
 import Navigation from './Navigation.jsx';
+
+const rollbarConfig = {
+  accessToken: '71863b44bef048699273abc48716ce56',
+  environment: 'production',
+};
 
 const AuthProvider = ({ children }) => {
   const storageUser = JSON.parse(localStorage.getItem('user')) ?? {};
@@ -62,26 +68,30 @@ const PrivateRoute = ({ children, path }) => {
 };
 
 const App = () => (
-  <AuthProvider>
-    <div className="d-flex flex-column h-100">
-      <Router>
-        <Navigation />
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <Route path="/signup">
-            <SignupPage />
-          </Route>
-          <PrivateRoute exact path="/">
-            <MainPage />
-          </PrivateRoute>
-          <Route path="*">
-            <NoMatch />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-  </AuthProvider>
+  <Provider config={rollbarConfig}>
+    <ErrorBoundary>
+      <AuthProvider>
+        <div className="d-flex flex-column h-100">
+          <Router>
+            <Navigation />
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/signup">
+                <SignupPage />
+              </Route>
+              <PrivateRoute exact path="/">
+                <MainPage />
+              </PrivateRoute>
+              <Route path="*">
+                <NoMatch />
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+      </AuthProvider>
+    </ErrorBoundary>
+  </Provider>
 );
 export default App;
