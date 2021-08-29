@@ -16,6 +16,7 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import LoginPage from './LoginPage.jsx';
+import SignupPage from './SignupPage.jsx';
 import MainPage from './MainPage.jsx';
 import { authContext } from '../contexts';
 import { useAuth, useSocket } from '../hooks';
@@ -84,7 +85,7 @@ const App = () => {
     <AuthProvider>
       <div className="d-flex flex-column h-100">
         <Router>
-          <Navbar bg="light" expand="lg" className="shadow-sm">
+          <Navbar bg="white" expand="lg" className="shadow-sm">
             <Container>
               <Navbar.Brand as={Link} to="/">{t('brand')}</Navbar.Brand>
               <Nav className="mr-auto" />
@@ -94,6 +95,9 @@ const App = () => {
           <Switch>
             <Route path="/login">
               <LoginPage />
+            </Route>
+            <Route path="/signup">
+              <SignupPage />
             </Route>
             <PrivateRoute exact path="/">
               <MainPage />

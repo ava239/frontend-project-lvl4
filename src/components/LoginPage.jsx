@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../hooks';
 import routes from '../routes.js';
@@ -24,8 +24,8 @@ const LoginPage = () => {
       password: '',
     },
     validationSchema: yup.object().shape({
-      username: yup.string().required(),
-      password: yup.string().required(),
+      username: yup.string().required(t('required_field')),
+      password: yup.string().required(t('required_field')),
     }),
     onSubmit: async (values) => {
       setAuthFailed(false);
@@ -100,7 +100,7 @@ const LoginPage = () => {
               <div className="text-center">
                 <span>{t('no_account_link')}</span>
                 &nbsp;
-                <a href="/signup">{t('registration_link')}</a>
+                <Link to="/signup">{t('registration')}</Link>
               </div>
             </div>
           </div>

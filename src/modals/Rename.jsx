@@ -37,10 +37,10 @@ const Rename = ({
     validateOnBlur: false,
     validationSchema: yup.object().shape({
       name: yup.string()
-        .required()
-        .min(3)
-        .max(20)
-        .test('unique', 'should_be_unique', (element) => !channels.map(({ name }) => name).includes(element)),
+        .required(t('required_field'))
+        .min(3, t('validation_username_length'))
+        .max(20, t('validation_username_length'))
+        .test('unique', t('should_be_unique'), (element) => !channels.map(({ name }) => name).includes(element)),
     }),
     onSubmit: (values) => {
       const onError = () => {
@@ -81,7 +81,7 @@ const Rename = ({
               isInvalid={!formik.isValid}
               disabled={formik.isSubmitting}
             />
-            <Form.Control.Feedback type="invalid">{t(formik.errors.name)}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
               <Button variant="secondary" className="me-2" type="button" onClick={onHide}>{t('cancel')}</Button>
               <Button variant="primary" type="submit" disabled={formik.isSubmitting}>{t('send')}</Button>
