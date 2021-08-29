@@ -1,8 +1,9 @@
 import { createContext } from 'react';
-import { io } from 'socket.io-client';
 
-const socket = io({ autoConnect: false });
-socket.withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
+export const authContext = createContext({});
+export const socketContext = createContext({});
+
+export const withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
   // eslint-disable-next-line functional/no-let
   let called = false;
 
@@ -19,6 +20,3 @@ socket.withTimeout = (onSuccess, onTimeout, timeout = 3000) => {
     onSuccess(...args);
   };
 };
-
-export const authContext = createContext({});
-export const socketContext = createContext(socket);

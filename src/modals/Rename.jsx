@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { useSocket } from '../hooks';
 import { chatLogger } from '../logger';
 import NameModal from './NameModal.jsx';
+import { withTimeout } from '../contexts';
 
 const mapStateToProps = (state) => {
   const { channelsInfo: { channels }, modal: { extra: { channelId } } } = state;
@@ -33,7 +34,7 @@ const Rename = ({
 
     const sendData = { ...values, id: channelId };
 
-    socket.volatile.emit('renameChannel', sendData, socket.withTimeout(({ status }) => {
+    socket.volatile.emit('renameChannel', sendData, withTimeout(({ status }) => {
       if (status !== 'ok') {
         onError();
         return;

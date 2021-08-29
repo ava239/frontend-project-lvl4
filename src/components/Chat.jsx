@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { useAuth, useSocket } from '../hooks';
 import { chatLogger } from '../logger';
+import { withTimeout } from '../contexts';
 
 const mapStateToProps = (state) => {
   const { messagesInfo: { messages }, channelsInfo: { channels, currentChannelId } } = state;
@@ -53,7 +54,7 @@ const Chat = ({
       const message = { ...values, channelId: currentChannelId, username: auth.username };
       chatLogger('message.send');
 
-      socket.volatile.emit('newMessage', message, socket.withTimeout(({ status }) => {
+      socket.volatile.emit('newMessage', message, withTimeout(({ status }) => {
         if (status !== 'ok') {
           onError();
           return;

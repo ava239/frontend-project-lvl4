@@ -10,7 +10,7 @@ import {
 import LoginPage from './LoginPage.jsx';
 import SignupPage from './SignupPage.jsx';
 import MainPage from './MainPage.jsx';
-import { authContext } from '../contexts';
+import { authContext, socketContext } from '../contexts';
 import { useAuth, useSocket } from '../hooks';
 import NoMatch from './NoMatchPage.jsx';
 import Navigation from './Navigation.jsx';
@@ -61,27 +61,29 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
-const App = () => (
-  <AuthProvider>
-    <div className="d-flex flex-column h-100">
-      <Router>
-        <Navigation />
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <Route path="/signup">
-            <SignupPage />
-          </Route>
-          <PrivateRoute exact path="/">
-            <MainPage />
-          </PrivateRoute>
-          <Route path="*">
-            <NoMatch />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-  </AuthProvider>
+const App = ({ socket }) => (
+  <socketContext.Provider value={socket}>
+    <AuthProvider>
+      <div className="d-flex flex-column h-100">
+        <Router>
+          <Navigation />
+          <Switch>
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+            <Route path="/signup">
+              <SignupPage />
+            </Route>
+            <PrivateRoute exact path="/">
+              <MainPage />
+            </PrivateRoute>
+            <Route path="*">
+              <NoMatch />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </AuthProvider>
+  </socketContext.Provider>
 );
 export default App;

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { useSocket } from '../hooks';
 import { chatLogger } from '../logger';
+import { withTimeout } from '../contexts';
 
 const mapStateToProps = (state) => {
   const { modal: { extra: { channelId: id } } } = state;
@@ -27,7 +28,7 @@ const Remove = ({
     };
 
     setSubmitting(true);
-    socket.volatile.emit('removeChannel', { id }, socket.withTimeout(({ status }) => {
+    socket.volatile.emit('removeChannel', { id }, withTimeout(({ status }) => {
       if (status !== 'ok') {
         onError();
         return;

@@ -4,6 +4,7 @@ import { useSocket } from '../hooks';
 import { chatLogger } from '../logger';
 import * as actions from '../actions';
 import NameModal from './NameModal.jsx';
+import { withTimeout } from '../contexts';
 
 const mapStateToProps = () => ({});
 
@@ -25,7 +26,7 @@ const Add = ({ onHide, setCurrentChannel }) => {
       inputRef.current.focus();
     };
 
-    socket.volatile.emit('newChannel', { ...values }, socket.withTimeout(({ status, data }) => {
+    socket.volatile.emit('newChannel', { ...values }, withTimeout(({ status, data }) => {
       if (status !== 'ok') {
         onError();
         return;
