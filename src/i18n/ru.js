@@ -32,6 +32,7 @@ export default {
       should_be_unique: 'Должно быть уникальным',
     },
     chat: {
+      channels_title: 'Каналы',
       placeholder: 'Введите сообщение...',
       message_count: {
         messages_0: '{{count}} сообщение',

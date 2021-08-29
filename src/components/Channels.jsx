@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import cn from 'classnames';
 import * as actions from '../actions';
 
 const mapStateToProps = (state) => {
@@ -32,36 +33,30 @@ const Channels = ({
       setCurrentChannel({ currentChannelId: channel.id });
       messageInput.current.focus();
     };
-
-    if (!channel.removable) {
+    const channelBtn = ({ removable }) => {
+      const classes = cn('w-100', 'rounded-0', 'text-start', { 'text-truncate': removable });
       return (
-        <li key={channel.id} className="nav-item w-100">
-          <Button className="w-100 rounded-0 text-start" variant={currentVariant} onClick={changeChannel}>
-            <span className="me-1">#</span>
-            {channel.name}
-          </Button>
-        </li>
+        <Button className={classes} variant={currentVariant} onClick={changeChannel}>
+          <span className="me-1">#</span>
+          {channel.name}
+        </Button>
       );
-    }
+    };
 
     return (
       <li key={channel.id} className="nav-item w-100">
-        <Dropdown as={ButtonGroup} className="d-flex">
-          <Button
-            className="w-100 rounded-0 text-start text-truncate"
-            variant={currentVariant}
-            onClick={changeChannel}
-          >
-            <span className="me-1">#</span>
-            {channel.name}
-          </Button>
-          <Dropdown.Toggle split variant={currentVariant} />
-
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('popup.link.remove')}</Dropdown.Item>
-            <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('popup.link.rename')}</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        {!channel.removable
+          ? channelBtn(channel)
+          : (
+            <Dropdown as={ButtonGroup} className="d-flex">
+              {channelBtn(channel)}
+              <Dropdown.Toggle split variant={currentVariant} />
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('popup.link.remove')}</Dropdown.Item>
+                <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('popup.link.rename')}</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
       </li>
     );
   };
@@ -69,7 +64,7 @@ const Channels = ({
   return (
     <>
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-        <span>Каналы</span>
+        <span>{t('chat.channels_title')}</span>
         <button type="button" className="p-0 text-primary btn btn-group-vertical" onClick={openAddChannelModal}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />

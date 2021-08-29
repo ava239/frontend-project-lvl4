@@ -5,22 +5,15 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect,
 } from 'react-router-dom';
-import {
-  Button,
-  Navbar,
-  Nav,
-  Container,
-} from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 import LoginPage from './LoginPage.jsx';
 import SignupPage from './SignupPage.jsx';
 import MainPage from './MainPage.jsx';
 import { authContext } from '../contexts';
 import { useAuth, useSocket } from '../hooks';
 import NoMatch from './NoMatchPage.jsx';
+import Navigation from './Navigation.jsx';
 
 const AuthProvider = ({ children }) => {
   const storageUser = JSON.parse(localStorage.getItem('user')) ?? {};
@@ -68,47 +61,27 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
-const AuthButton = () => {
-  const auth = useAuth();
-  const { t } = useTranslation();
-
-  return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut}>{t('logout')}</Button>
-      : null
-  );
-};
-
-const App = () => {
-  const { t } = useTranslation();
-  return (
-    <AuthProvider>
-      <div className="d-flex flex-column h-100">
-        <Router>
-          <Navbar bg="white" expand="lg" className="shadow-sm">
-            <Container>
-              <Navbar.Brand as={Link} to="/">{t('brand')}</Navbar.Brand>
-              <Nav className="mr-auto" />
-              <AuthButton />
-            </Container>
-          </Navbar>
-          <Switch>
-            <Route path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/signup">
-              <SignupPage />
-            </Route>
-            <PrivateRoute exact path="/">
-              <MainPage />
-            </PrivateRoute>
-            <Route path="*">
-              <NoMatch />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
-    </AuthProvider>
-  );
-};
+const App = () => (
+  <AuthProvider>
+    <div className="d-flex flex-column h-100">
+      <Router>
+        <Navigation />
+        <Switch>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/signup">
+            <SignupPage />
+          </Route>
+          <PrivateRoute exact path="/">
+            <MainPage />
+          </PrivateRoute>
+          <Route path="*">
+            <NoMatch />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
+  </AuthProvider>
+);
 export default App;
