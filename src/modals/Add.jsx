@@ -25,9 +25,7 @@ const Add = ({ onHide, setCurrentChannel }) => {
       inputRef.current.focus();
     };
 
-    const channel = { ...values };
-
-    socket.volatile.emit('newChannel', channel, socket.withTimeout(({ status, data }) => {
+    socket.volatile.emit('newChannel', { ...values }, socket.withTimeout(({ status, data }) => {
       if (status !== 'ok') {
         onError();
         return;
