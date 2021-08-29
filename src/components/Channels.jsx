@@ -58,8 +58,8 @@ const Channels = ({
           <Dropdown.Toggle split variant={currentVariant} />
 
           <Dropdown.Menu>
-            <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('remove')}</Dropdown.Item>
-            <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('rename')}</Dropdown.Item>
+            <Dropdown.Item onClick={() => openRemoveChannelModal(channel)}>{t('popup.link.remove')}</Dropdown.Item>
+            <Dropdown.Item onClick={() => openRenameChannelModal(channel)}>{t('popup.link.rename')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </li>

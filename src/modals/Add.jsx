@@ -33,10 +33,10 @@ const Add = ({ channels, onHide, setCurrentChannel }) => {
     validateOnBlur: false,
     validationSchema: yup.object().shape({
       name: yup.string()
-        .required(t('required_field'))
-        .min(3, t('validation_username_length'))
-        .max(20, t('validation_username_length'))
-        .test('unique', t('should_be_unique'), (element) => !channels.map(({ name }) => name).includes(element)),
+        .required(t('validation.required_field'))
+        .min(3, t('validation.username_length'))
+        .max(20, t('validation.username_length'))
+        .test('unique', t('validation.should_be_unique'), (element) => !channels.map(({ name }) => name).includes(element)),
     }),
     onSubmit: (values) => {
       const onError = () => {
@@ -62,7 +62,7 @@ const Add = ({ channels, onHide, setCurrentChannel }) => {
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>{t('add_channel')}</Modal.Title>
+        <Modal.Title>{t('popup.title.add')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -80,8 +80,12 @@ const Add = ({ channels, onHide, setCurrentChannel }) => {
             />
             <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
             <div className="d-flex justify-content-end">
-              <Button variant="secondary" className="me-2" type="button" onClick={onHide}>{t('cancel')}</Button>
-              <Button variant="primary" type="submit" disabled={formik.isSubmitting}>{t('send')}</Button>
+              <Button variant="secondary" className="me-2" type="button" onClick={onHide}>
+                {t('popup.button.cancel')}
+              </Button>
+              <Button variant="primary" type="submit" disabled={formik.isSubmitting}>
+                {t('popup.button.send')}
+              </Button>
             </div>
           </Form.Group>
         </Form>

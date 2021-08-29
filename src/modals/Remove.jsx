@@ -40,13 +40,17 @@ const Remove = ({
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>{t('remove_channel')}</Modal.Title>
+        <Modal.Title>{t('popup.title.remove')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">{t('confirm')}</p>
+        <p className="lead">{t('popup.message.confirm')}</p>
         <div className="d-flex justify-content-end">
-          <Button variant="secondary" disabled={submitting} className="me-2" type="button" onClick={onHide}>{t('cancel')}</Button>
-          <Button variant="danger" disabled={submitting} type="submit" onClick={handleRemove}>{t('remove')}</Button>
+          <Button variant="secondary" disabled={submitting} className="me-2" type="button" onClick={onHide}>
+            {t('popup.button.cancel')}
+          </Button>
+          <Button variant="danger" disabled={submitting} type="submit" onClick={handleRemove}>
+            {t('popup.button.remove')}
+          </Button>
         </div>
       </Modal.Body>
     </Modal>
