@@ -62,7 +62,13 @@ const MainPage = ({
 
   const chatRef = useRef(null);
   const messageRef = useRef(null);
-  const scroll = () => chatRef && chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+  const scroll = () => {
+    if (!chatRef) {
+      return;
+    }
+    console.log(chatRef.current);
+    chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
+  };
 
   useEffect(() => {
     // eslint-disable-next-line functional/no-let
