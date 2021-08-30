@@ -62,9 +62,10 @@ const MainPage = ({
 
   const chatBoxRef = useRef(null);
   const messageRef = useRef(null);
-  const scroll = () => chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
+  const scroll = () => chatBoxRef.current
+    && chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
 
-  useEffect(() => {
+  useEffect(async () => {
     const fetchContent = async () => {
       const { data, status } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
       if (status !== 200) {
@@ -93,7 +94,7 @@ const MainPage = ({
       });
     };
 
-    fetchContent();
+    await fetchContent();
   }, []);
 
   if (!loaded) {
