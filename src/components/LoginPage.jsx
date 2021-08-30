@@ -89,7 +89,7 @@ const LoginPage = () => {
                     isInvalid={authFailed}
                   />
                   <Form.Label htmlFor="password">{t('loginForm.fields.password')}</Form.Label>
-                  <Form.Control.Feedback tooltip type="invalid">{t('validation.password_incorrect')}</Form.Control.Feedback>
+                  <Form.Control.Feedback tooltip type="invalid">{authFailed ? t('validation.password_incorrect') : null}</Form.Control.Feedback>
                 </Form.Floating>
                 <Button type="submit" variant="outline-primary" className="w-100 mb-3">
                   {t('loginForm.button')}
