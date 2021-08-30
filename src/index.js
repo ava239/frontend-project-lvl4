@@ -7,7 +7,6 @@ import '../assets/application.scss';
 import { render } from 'react-dom';
 import { io } from 'socket.io-client';
 import init from './init.jsx';
-import './i18n/index.js';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
