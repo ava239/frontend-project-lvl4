@@ -37,6 +37,6 @@ const Add = ({ onHide, setCurrentChannel }) => {
     }, onError));
   };
 
-  return <NameModal onHide={onHide} initialName="" nameKey="popup.title.add" onSubmit={onSubmit} inputRef={inputRef} />;
+  return <NameModal onHide={onHide} initialName="" testId="add-channel" nameKey="popup.title.add" onSubmit={onSubmit} inputRef={inputRef} />;
 };
 export default connect(mapStateToProps, actionCreators)(Add);

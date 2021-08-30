@@ -44,6 +44,6 @@ const Rename = ({
     }, onError));
   };
 
-  return <NameModal onHide={onHide} initialName={channel.name} nameKey="popup.title.rename" onSubmit={onSubmit} inputRef={inputRef} />;
+  return <NameModal onHide={onHide} initialName={channel.name} testId="rename-channel" nameKey="popup.title.rename" onSubmit={onSubmit} inputRef={inputRef} />;
 };
 export default connect(mapStateToProps, actionCreators)(Rename);

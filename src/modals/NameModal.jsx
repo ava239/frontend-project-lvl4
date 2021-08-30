@@ -18,6 +18,7 @@ const NameModal = ({
   inputRef,
   channels,
   initialName,
+  testId,
 }) => {
   const { t } = useTranslation();
 
@@ -48,7 +49,7 @@ const NameModal = ({
             <Form.Control
               onChange={formik.handleChange}
               className="mb-2"
-              data-testid="input-body"
+              data-testid={testId}
               name="name"
               required
               value={formik.values.name}
