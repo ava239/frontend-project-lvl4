@@ -60,10 +60,9 @@ const MainPage = ({
   const { t } = useTranslation();
   const socket = useSocket();
 
-  const chatBoxRef = useRef(null);
+  const chatRef = useRef(null);
   const messageRef = useRef(null);
-  const scroll = () => chatBoxRef.current
-    && chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
+  const scroll = () => chatRef && chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
 
   useEffect(() => {
     // eslint-disable-next-line functional/no-let
@@ -118,7 +117,7 @@ const MainPage = ({
             <Channels showModal={openModal} messageInput={messageRef} />
           </div>
           <div className="col p-0 h-100">
-            <Chat chatBox={chatBoxRef} messageInput={messageRef} />
+            <Chat chatBox={chatRef} messageInput={messageRef} />
           </div>
         </div>
       </div>
