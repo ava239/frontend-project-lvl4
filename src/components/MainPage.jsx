@@ -80,7 +80,9 @@ const MainPage = ({
       setInitialState(data);
       setLoaded(true);
       scroll();
-      socket.connect();
+      if (socket.connect) {
+        socket.connect();
+      }
       socket.on('newMessage', (message) => {
         addMessage({ message });
         socketLogger('newMessage', message);
