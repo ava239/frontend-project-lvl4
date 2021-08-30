@@ -65,10 +65,12 @@ const MainPage = ({
   const scroll = () => chatBoxRef.current
     && chatBoxRef.current.scrollTo(0, chatBoxRef.current.scrollHeight);
 
-  useEffect(async () => {
+  useEffect(() => {
+    // eslint-disable-next-line functional/no-let
+    let fetched = false;
     const fetchContent = async () => {
       const { data, status } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
-      if (status !== 200) {
+      if (status !== 200 || fetched) {
         return;
       }
       setInitialState(data);
@@ -94,7 +96,8 @@ const MainPage = ({
       });
     };
 
-    await fetchContent();
+    fetchContent();
+    return () => { fetched = true; };
   }, []);
 
   if (!loaded) {
