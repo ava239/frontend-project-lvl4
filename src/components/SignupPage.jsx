@@ -31,7 +31,7 @@ const SignupPage = () => {
         .max(20, t('validation.username_length')),
       password: yup.string()
         .required(t('validation.required_field'))
-        .min(6, t('validation.username_length')),
+        .min(6, t('validation.password_length')),
       confirmPassword: yup.string()
         .required(t('validation.required_field'))
         .oneOf([yup.ref('password'), null]),
