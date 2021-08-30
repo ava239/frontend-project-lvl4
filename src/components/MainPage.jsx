@@ -63,10 +63,9 @@ const MainPage = ({
   const chatRef = useRef(null);
   const messageRef = useRef(null);
   const scroll = () => {
-    if (!chatRef) {
+    if (!chatRef || !chatRef.current.scrollTo) {
       return;
     }
-    console.log(chatRef.current);
     chatRef.current.scrollTo(0, chatRef.current.scrollHeight);
   };
 
